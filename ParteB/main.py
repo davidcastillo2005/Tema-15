@@ -1,3 +1,3 @@
-from bifurcation_diagram import diagram
+from differential_field import run
 
-diagram()
+run()
