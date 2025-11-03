@@ -1,2 +1,3 @@
-def dz_dt(m, z):
-    return m*z - z**3
+def dz_dt(M, z):
+    return M * z - z ** 3
+    # return z * (M + z) * (M - z)

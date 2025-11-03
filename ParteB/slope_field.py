@@ -3,22 +3,23 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-def isocline(dy_dx, density, xmin, xmax, ymin, ymax):
-    density = 21
+def slope_field(dy_dx, density, xmin, xmax, ymin, ymax):
+    m = np.linspace(xmin, xmax, density)
+    t = np.linspace(ymin, ymax, density)
 
-    t = np.linspace(xmin, xmax, density)
-    z = np.linspace(ymin, ymax, density)
+    M, T = np.meshgrid(m, t)
 
-    T, Z = np.meshgrid(t, z)
-
-    dZ_dT = dy_dx(T, Z)
+    dZ_dT = dy_dx(M, T)
 
     U = 1 / np.sqrt(1 + dZ_dT**2)
-    V = np.abs(dZ_dT) / np.sqrt(1 + dZ_dT**2)
+    V = dZ_dT / np.sqrt(1 + dZ_dT**2)
 
+    return M, T, U, V
+
+def plt_slope_field(X, Y, U, V):
     ax = plt.subplot(1,1,1)
-    ax.streamplot(T, Z, U, V, color='gray', linewidth=1, density=1.5, arrowstyle='->', arrowsize=1.5)
-    ax.quiver(T, Z, U, V, color='dodgerblue', scale=50, width=0.0015,headwidth=4, headlength=5)
+    ax.streamplot(X, Y, U, V, color='gray', linewidth=1, density=1.5, arrowstyle='->', arrowsize=1.5)
+    ax.quiver(X, Y, U, V, color='dodgerblue', scale=50, width=0.0015,headwidth=4, headlength=5)
     
     ax.grid(True, color = 'lightgray', linestyle='--', linewidth = 0.5)
 
