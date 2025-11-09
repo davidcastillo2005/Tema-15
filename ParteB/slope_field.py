@@ -33,7 +33,7 @@ def plt_slope_field(X, Y, U, V):
     ax.tick_params(axis='both', which='major', colors='black', labelsize=12)
 
     ax.set_aspect('equal', adjustable='box')
-    ax.set_title('Differential field', fontsize = 16)
+    ax.set_title('Slope field', fontsize = 16)
     ax.set_xlabel('t')
     ax.set_ylabel('z')
     plt.show()

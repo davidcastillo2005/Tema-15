@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+
+% --- CUERPO DEL DOCUMENTO ---
+\begin{document}
+	\noindent
+	\textbf{Parte B (Bifurcación).} Para capturar cambios en la dinámica gravitacional reducida, 
+	considere el modelo unidimensional con parámetro $\mu$:
+	
+	\[
+	\frac{dz}{dt} = \mu z - z^3
+	\]
+	
+	\begin{enumerate}
+		\item Determine los puntos de equilibrio en función de $\mu$.
+		
+		
+		$\tilde{\mathbf{z}} \in \mathbb{R}$ es un \textbf{punto de equilibrio} para la ecuación diferencial
+		
+		\[
+		\frac{d\mathbf{z}}{dt} = \mathbf{f}(t, \mathbf{z})
+		\]
+		
+		Si $\mathbf{f}(t, \tilde{\mathbf{z}}) = \mathbf{0}$ para cualquier $t$.
+		
+		Hallar los puntos que cumplen que la pendiente es igual a 0.
+		
+		\[
+		\mathbf{f}(t, \tilde{\mathbf{z}}) = 0
+		\]
+		
+		\[
+		\mu \tilde{\mathbf{z}} - \tilde{\mathbf{z}}^3 = 0
+		\]
+		
+		\[
+		\tilde{\mathbf{z}}(\mu - \tilde{\mathbf{z}}^2) = 0
+		\]
+		
+		\[
+		\tilde{\mathbf{z}}(\sqrt{\mu} + \tilde{\mathbf{z}})(\sqrt{\mu} - \tilde{\mathbf{z}}) = 0
+		\]
+		
+		\[
+		\tilde{\mathbf{z}} = 0 \lor \tilde{\mathbf{z}} = \sqrt{\mu} \lor \tilde{\mathbf{z}} = -\sqrt{\mu}
+		\]
+		
+		Por tanto, si $z = 0 \lor z = \sqrt{\mu} \lor z = -\sqrt{\mu}$ entonces $z$ es un punto de equilibrio para $\frac{dz}{dt} = \mu z - z^3$
+		
+		\item Clasifique la estabilidad mediante $z' = \mu - 3z^2$.
+		
+		\item Construya el diagrama de bifurcación en el plano $(\mu, z)$ e identifique el tipo de bifurcación. 
+		Interprete qué significa físicamente el paso de $\mu < 0$ a $\mu > 0$ en términos de escape 
+		gravitacional frente a captura.
+	\end{enumerate}
+	
+	\noindent
+	\textbf{1.} 
+\end{document}
