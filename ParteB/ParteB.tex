@@ -1,11 +1,12 @@
 \documentclass{article}
+\usepackage{graphicx}
+\usepackage{caption}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[a4paper, margin=2.5cm]{geometry}
 
-% --- CUERPO DEL DOCUMENTO ---
 \begin{document}
 	\noindent
 	\textbf{Parte B (Bifurcación).} Para capturar cambios en la dinámica gravitacional reducida, 
@@ -94,7 +95,7 @@
 				\dot{z}(\sqrt{\mu}) = -2\mu < 0
 				\]
 				
-				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = \sqrt{\mu}$ es \textbf{estable}.
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = \sqrt{\mu}$ es \textbf{asintóticamente estable}.
 				
 				\item $z = -\sqrt{\mu}$
 				\[
@@ -105,7 +106,7 @@
 				\dot{z}(-\sqrt{\mu}) = -2\mu < 0
 				\]
 				
-				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{estable}.
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{asintóticamente estable}.
 			\end{itemize}
 			
 			\item $\mu < 0$
@@ -115,7 +116,7 @@
 				\dot{z}(0) = \mu < 0
 				\]
 				
-				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{estable}.
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{asintóticamente estable}.
 				
 				\item $z = \sqrt{\mu}$
 				\[
@@ -129,7 +130,7 @@
 				\dot{z}(-\sqrt{\mu}) = -2\mu > 0
 				\]
 				
-				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{estable}.
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{asintóticamente estable}.
 				
 			\end{itemize}
 			
@@ -154,18 +155,19 @@
 			\frac{dz}{dt} = \mu z - z^3 = -z^3
 			\]
 			
-			A continuación se muestra el campo direccional de la función solución $z(t)$ alrededor de $\tilde{z} = 0$.
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=.33\textwidth]{CampoDireccional1.png}
+				\caption{Campo direccional de $\frac{dz}{dt} = -z^3$ alrededor del punto de equilibrio (0, 0)}
+			\end{figure}
 			
-			
-			
-			Como todas las puntas alrededor del punto $\tilde{z}$ apuntan hacia $\tilde{z}$, las soluciones de $\frac{dz}{dt}$, que comienzan con un punto inicial $(t_0, z_0)$ lo suficientemente cerca de $\tilde{z}$ presentan comportamiento asintótico $\lim_{x \rightarrow +\infty} = \tilde{z}$. 
+			Como las pendientes alrededor del punto $\tilde{z}$ apuntan hacia $\tilde{z}$, las soluciones de $\frac{dz}{dt}$ que comienzan con un punto inicial $(t_0, z_0)$ lo suficientemente cerca de $\tilde{z}$ presentan comportamiento asintótico $\lim_{x \rightarrow +\infty} = \tilde{z}$. 
 			
 			Por tanto, si $\mu = 0$, entonces $z_0 = 0$, $z_1 = \sqrt{\mu}$ y $z_2 = -\sqrt{\mu}$ son \textbf{asintóticamente estables}.		
 			
 		\end{itemize}
 		
-		\item Construya el diagrama de bifurcación en el plano $(\mu, z)$ e identifique el tipo de bifurcación. 
-		Interprete qué significa físicamente el paso de $\mu < 0$ a $\mu > 0$ en términos de escape 
-		gravitacional frente a captura.
+		\item Construya el diagrama de bifurcación en el plano $(\mu, z)$ e identifique el tipo de bifurcación. Interprete qué significa físicamente el paso de $\mu < 0$ a $\mu > 0$ en términos de escape gravitacional frente a captura.
+		
 	\end{enumerate}
 \end{document}
