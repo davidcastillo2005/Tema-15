@@ -169,5 +169,27 @@
 		
 		\item Construya el diagrama de bifurcación en el plano $(\mu, z)$ e identifique el tipo de bifurcación. Interprete qué significa físicamente el paso de $\mu < 0$ a $\mu > 0$ en términos de escape gravitacional frente a captura.
 		
+		\begin{itemize}
+			\item Para $\mu < 0$: Existe un solo punto de equilibrio estable $z = 0$ (dibujado com una linea continua).
+			
+			\item Para $\mu = 0$: Existe un solo punto de equilibrio estable $z = 0$. Donde ocurre una bifurcación de tridente supercrítica.
+			
+			\item Para $\mu > 0$: Existe un punto de equilibrio inestable en z = 0 (dibujado con una linea discontinua), y dos esquilibrios estables simetricos $z = \pm\sqrt{\mu}$ (ambos dibujados con lineas continuas).
+		\end{itemize}
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=.33\textwidth]{DiagramaBifurcación.png}
+			\caption{Diagrama bifurcación en el plano $(\mu, z)$. Las lineas continuas representan los puntos de equilibrios estables, las discontinuas los inestables.}
+		\end{figure}
+		
+		\textbf{Interpretacion fisica} del paso de $\mu < 0$ a $\mu < 0$:
+		
+		En $\mu < 0$ el sistema presenta un punto de equilibrio estable en el origen que representa la captura gravitacional. Donde cualquier perturbación o movimiento inicial del objeto decaerá con el tiempo, quedando atrapado en $z = 0$.
+		
+		En $\mu > 0$ el origen se vuelve inestable, el objeto ya no puede mantenerse en el centro, una minima perturbación hará que el mismo se aleje a uno de los nuevos puntos de equilibrio estables $z = \pm\sqrt{\mu}$.
+		
+		En resumen, esto representa una ruptura de simetría donde el sistema escapa del estado trivial de captura central para orbitar o situarse en una nueva configuración alejada del centro.
+		
 	\end{enumerate}
 \end{document}
