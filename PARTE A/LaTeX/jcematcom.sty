@@ -195,8 +195,6 @@
 
 \def\@startauthor{\noindent \normalsize\bf}
 \def\@endauthor{}
-\def\@starttutors{\noindent \small {\bf Tutor(es):~}}
-\def\@endtutors{\normalsize}
 \def\@maketitle{\vbox{\hsize\textwidth
  \linewidth\hsize \vskip \beforetitskip
  {\begin{center} \Large\bf \@title \par \end{center}} \vskip \aftertitskip
@@ -206,10 +204,6 @@
   \def\name{\normalsize\bf}%
   \def\AND{\@endauthor\rm\hss \vskip \interauthorskip \@startauthor}
   \@startauthor \@author \@endauthor}
-
-  \vskip \aftermaketitskip
-  \noindent \@starttutors \@tutors \@endtutors
-  \vskip \aftermaketitskip
 }}
 
 \newcommand\kernelmachines{(for {\sc{http://www.kernel-machines.org}})}
