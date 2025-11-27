@@ -1,0 +1,195 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+
+\begin{document}
+	\noindent
+	\textbf{Parte B (Bifurcación).} Para capturar cambios en la dinámica gravitacional reducida, 
+	considere el modelo unidimensional con parámetro $\mu$:
+	
+	\[
+	\frac{dz}{dt} = \mu z - z^3
+	\]
+	
+	\begin{enumerate}
+		\item Determine los puntos de equilibrio en función de $\mu$.
+		
+		
+		$\tilde{\mathbf{z}} \in \mathbb{R}$ es un \textbf{punto de equilibrio} para la ecuación diferencial
+		
+		\[
+		\frac{d{z}}{dt} = {f}(t, {z})
+		\]
+		
+		Si ${f}(t, \tilde{{z}}) = {0}$ para cualquier $t$.
+		
+		Hallar los puntos que cumplen que la pendiente es igual a 0.
+		
+		\[
+		{f}(t, \tilde{{z}}) = 0
+		\]
+		
+		\[
+		\mu \tilde{{z}} - \tilde{{z}}^3 = 0
+		\]
+		
+		\[
+		\tilde{{z}}(\mu - \tilde{{z}}^2) = 0
+		\]
+		
+		\[
+		\tilde{{z}}(\sqrt{\mu} + \tilde{{z}})(\sqrt{\mu} - \tilde{{z}}) = 0
+		\]
+		
+		\[
+		\tilde{{z}} = 0 \lor \tilde{{z}} = \sqrt{\mu} \lor \tilde{{z}} = -\sqrt{\mu}
+		\]
+		
+		Por tanto, si $z = \mathbf{0}$, $z = \mathbf{\sqrt{\mu}}$ ó $z = \mathbf{-\sqrt{\mu}}$ entonces $z$ es un punto de equilibrio para $\frac{dz}{dt} = \mu z - z^3$
+		
+		\item Clasifique la estabilidad mediante $\dot{z} = \mu - 3z^2$.
+		
+		\textbf{Teorema} (Estabilidad por linealización).
+		Sea el sistema no lineal autónomo unidimensional $\dot{z} = f(z)$, y sea $\tilde{z}$ un punto de equilibrio.
+		
+		La estabilidad de $\tilde{z}$ se determina analizando el signo de la derivada $f'(\tilde{z})$:
+		
+		\begin{itemize}
+			\item Si la derivada es positiva ($f'(\tilde{z}) > 0$), entonces el punto de 
+			equilibrio $\tilde{z}$ es \textbf{inestable} (un repulsor).
+			
+			\item Si la derivada es negativa ($f'(\tilde{z}) < 0$), entonces el punto de 
+			equilibrio $\tilde{z}$ es \textbf{asintóticamente estable} (un atractor).
+			
+			\item Si la derivada es cero ($f'(\tilde{z}) = 0$), la linealización no decide la 
+			estabilidad y se requieren métodos de orden superior. Este es el caso de una 
+			posible bifurcación.
+		\end{itemize}
+		
+		
+		\begin{itemize}
+			\item $\mu > 0$
+			\begin{itemize}
+				\item $z = 0$
+				\[
+				\dot{z}(0) = \mu - 3 (0)^2 = \mu
+				\]
+				
+				\[
+				\dot{z}(0) = \mu > 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{inestable}.
+				
+				\item $z = \sqrt{\mu}$
+				\[
+				\dot{z}(\sqrt{\mu}) = \mu - 3 (\sqrt{\mu})^2 = \mu - 3\mu = -2\mu
+				\]
+				
+				\[
+				\dot{z}(\sqrt{\mu}) = -2\mu < 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = \sqrt{\mu}$ es \textbf{asintóticamente estable}.
+				
+				\item $z = -\sqrt{\mu}$
+				\[
+				\dot{z}(-\sqrt{\mu}) = \mu - 3 (-\sqrt{\mu})^2 = \mu - 3\mu = -2\mu
+				\]
+				
+				\[
+				\dot{z}(-\sqrt{\mu}) = -2\mu < 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{asintóticamente estable}.
+			\end{itemize}
+			
+			\item $\mu < 0$
+			\begin{itemize}
+				\item $z = 0$
+				\[
+				\dot{z}(0) = \mu < 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{asintóticamente estable}.
+				
+				\item $z = \sqrt{\mu}$
+				\[
+				\dot{z}(\sqrt{\mu}) = -2\mu > 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = \sqrt{\mu}$ es \textbf{inestable}.
+				
+				\item $z = -\sqrt{\mu}$
+				\[
+				\dot{z}(-\sqrt{\mu}) = -2\mu > 0
+				\]
+				
+				Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{asintóticamente estable}.
+				
+			\end{itemize}
+			
+			\item $\mu = 0$
+			\[
+			\dot{z}(0) = 0
+			\]
+			
+			\[
+			\dot{z}(\sqrt{\mu}) = -2\mu = 0
+			\]
+			
+			\[
+			\dot{z}(-\sqrt{\mu}) = 2\mu = 0
+			\]
+			
+			Si $\mu = 0$ entonces el teorema no decide la estabilidad en los puntos de equilibrios.
+			
+			Analizar gráficamente el comportamiento de $\frac{dz}{dt} = \mu z - z^3$.
+			
+			\[
+			\frac{dz}{dt} = \mu z - z^3 = -z^3
+			\]
+			
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=.33\textwidth]{CampoDireccional1.png}
+				\caption{Campo direccional de $\frac{dz}{dt} = -z^3$ alrededor del punto de equilibrio (0, 0)}
+			\end{figure}
+			
+			Como las pendientes alrededor del punto $\tilde{z}$ apuntan hacia $\tilde{z}$, las soluciones de $\frac{dz}{dt}$ que comienzan con un punto inicial $(t_0, z_0)$ lo suficientemente cerca de $\tilde{z}$ presentan comportamiento asintótico $\lim_{x \rightarrow +\infty} = \tilde{z}$. 
+			
+			Por tanto, si $\mu = 0$, entonces $z_0 = 0$, $z_1 = \sqrt{\mu}$ y $z_2 = -\sqrt{\mu}$ son \textbf{asintóticamente estables}.		
+			
+		\end{itemize}
+		
+		\item Construya el diagrama de bifurcación en el plano $(\mu, z)$ e identifique el tipo de bifurcación. Interprete qué significa físicamente el paso de $\mu < 0$ a $\mu > 0$ en términos de escape gravitacional frente a captura.
+		
+		\begin{itemize}
+			\item Para $\mu < 0$: Existe un solo punto de equilibrio estable $z = 0$ (dibujado com una linea continua).
+			
+			\item Para $\mu = 0$: Existe un solo punto de equilibrio estable $z = 0$. Donde ocurre una bifurcación de tridente supercrítica.
+			
+			\item Para $\mu > 0$: Existe un punto de equilibrio inestable en z = 0 (dibujado con una linea discontinua), y dos esquilibrios estables simetricos $z = \pm\sqrt{\mu}$ (ambos dibujados con lineas continuas).
+		\end{itemize}
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=.33\textwidth]{DiagramaBifurcación.png}
+			\caption{Diagrama bifurcación en el plano $(\mu, z)$. Las lineas continuas representan los puntos de equilibrios estables, las discontinuas los inestables.}
+		\end{figure}
+		
+		\textbf{Interpretacion fisica} del paso de $\mu < 0$ a $\mu < 0$:
+		
+		En $\mu < 0$ el sistema presenta un punto de equilibrio estable en el origen que representa la captura gravitacional. Donde cualquier perturbación o movimiento inicial del objeto decaerá con el tiempo, quedando atrapado en $z = 0$.
+		
+		En $\mu > 0$ el origen se vuelve inestable, el objeto ya no puede mantenerse en el centro, una minima perturbación hará que el mismo se aleje a uno de los nuevos puntos de equilibrio estables $z = \pm\sqrt{\mu}$.
+		
+		En resumen, esto representa una ruptura de simetría donde el sistema escapa del estado trivial de captura central para orbitar o situarse en una nueva configuración alejada del centro.
+		
+	\end{enumerate}
+\end{document}
