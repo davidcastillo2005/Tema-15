@@ -6,9 +6,10 @@
 Este repositorio contiene la implementación numérica, análisis matemático y visualización de resultados para el **Tema 15**, basado en el texto de *Edwards & Penney (4ta edición)*.
 
 **Integrantes:**
-* Patricia Conde C-211
-* David Castillo Rodríguez C-2XX
-* Boris C-2XX
+* Patricia Conde Lorente C-211
+* David Castillo Rodríguez C-211
+* Boris Luis Vizcay Cartaya C-2XX
+
 # Proyecto de EDO y Métodos Numéricos - Tema 15
 
 ## 📄 Descripción del Problema
