@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 G = 6.674e-11       
 Me = 5.972e24  
@@ -15,13 +16,13 @@ def euler(v0, r0, h, max_steps):
     r = r0
     v = v0
 
-    for _ in range(max_steps):
+    for n in range(max_steps):
         a = acceleration(r)
         r_new = r + v*h
         v_new = v + a*h
         r, v = r_new, v_new
 
-        if r >= r_eq or r >= S:
+        if r >= S:
             return True
         if r <= R:
             return False
@@ -32,7 +33,7 @@ def rk4(v0, r0, h, max_steps):
     r = r0
     v = v0
 
-    for _ in range(max_steps):
+    for n in range(max_steps):
         a1 = acceleration(r)
         k1_r = v
         k1_v = a1
@@ -54,7 +55,7 @@ def rk4(v0, r0, h, max_steps):
 
         r, v = r_new, v_new
 
-        if r >= r_eq or r >= S:
+        if r >= S:
             return True
         if r <= R:
             return False
@@ -74,7 +75,7 @@ def heun(v0, r0, h, max_steps):
         v_new = v + 0.5*h*(a1 + a2)
         r, v = r_new, v_new
 
-        if r >= r_eq or r >= S:
+        if r >= S:
             return True
         if r <= R:
             return False
@@ -92,8 +93,6 @@ def verlet(v0, r0, h, max_steps):
         v_new = v + 0.5*(a + a_new)*h
         r, v, a = r_new, v_new, a_new
         
-        if r >= r_eq:
-            return True
         if r <= R:
             return False
         if r >= S:
@@ -123,23 +122,35 @@ def bisection(metodo, r0, h, max_steps):
     return velocidad_critica
 
 
-print("-.-.-h=1-.-.-")
-print(f"Euler → {bisection(euler,R,1,1000000)}")
-print(f"Heun → {bisection(heun,R,1,1000000)}")
-print(f"Verlet → {bisection(verlet,R,1,1000000)}")
-print(f"RK4 → {bisection(rk4,R,1,1000000)}")
-print("-.-.-h=5-.-.-")
-print(f"Euler → {bisection(euler,R,5,1000000)}")
-print(f"Heun → {bisection(heun,R,5,1000000)}")
-print(f"Verlet → {bisection(verlet,R,5,1000000)}")
-print(f"RK4 → {bisection(rk4,R,5,1000000)}")
-print("-.-.-h=10-.-.-")
-print(f"Euler → {bisection(euler,R,10,1000000)}")
-print(f"Heun → {bisection(heun,R,10,1000000)}")
-print(f"Verlet → {bisection(verlet,R,10,1000000)}")
-print(f"RK4 → {bisection(rk4,R,10,1000000)}")
-print("-.-.-h=100-.-.-")
-print(f"Euler → {bisection(euler,R,100,1000000)}")
-print(f"Heun → {bisection(heun,R,100,1000000)}")
-print(f"Verlet → {bisection(verlet,R,100,1000000)}")
-print(f"RK4 → {bisection(rk4,R,100,1000000)}")
+
+methods = [
+    ("Euler", euler),
+    ("Heun", heun),
+    ("Verlet", verlet),
+    ("RK4", rk4)
+]
+
+
+h_values = [1, 5, 10, 100]
+results = []
+
+for h in h_values:
+    row = {"h (s)": h}
+    
+    for method_name, method_func in methods:
+        v_critica = bisection(method_func, R, h, 1000000)
+        row[method_name] = v_critica
+    
+    results.append(row)
+
+df = pd.DataFrame(results)
+pd.set_option('display.precision', 2)
+pd.set_option('display.width', 100)
+pd.set_option('display.max_columns', None)
+
+print("\n" + "="*70)
+print("TABLA DE RESULTADOS - VELOCIDADES CRÍTICAS (m/s)")
+print("="*70)
+
+print("\n" + df.to_string(index=False))
+print("\n" + "-"*70)
