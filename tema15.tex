@@ -1,0 +1,645 @@
+%===================================================================================
+% JORNADA CIENTÍFICA ESTUDIANTIL - MATCOM, UH
+%===================================================================================
+%===================================================================================
+
+\documentclass[a4paper,10pt,twocolumn]{article}
+
+%===================================================================================
+% Paquetes
+%===================================================================================
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\pgfplotsset{compat=1.18}
+
+% Cargar el estilo jcematcom
+\usepackage{jcematcom}
+
+% Configuración de hyperref
+\hypersetup{
+    colorlinks=true,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue,
+    pdftitle={Análisis de Problemas Gravitacionales},
+    pdfauthor={Patricia Conde Lorente, David Castillo Rodríguez, Boris Luis Vizcay Cartaya}
+}
+
+%===================================================================================
+% Presentación
+%===================================================================================
+\title{Aceleración gravitacional variable}
+
+\author{Patricia Conde Lorente (Grupo C212)\\
+David Castillo Rodríguez (Grupo C211) \\ Boris Luis Vizcay Cartaya (Grupo C211)}
+
+
+% Headings
+\ShortHeadings{Aceleración gravitacional variable}{Autores}
+
+%===================================================================================
+% DOCUMENTO
+%===================================================================================
+\begin{document}
+
+\twocolumn[
+\maketitle
+
+%===================================================================================
+% Resumen y Abstract
+%===================================================================================
+
+\begin{abstract}
+Se presenta un análisis integral de problemas gravitacionales que abarca desde el clásico problema de Julio Verne sobre aceleración gravitacional variable hasta modelos reducidos unidimensionales. En la primera parte, se realiza un análisis numérico completo del movimiento de un proyectil atraído simultáneamente por la Tierra y la Luna, evaluando la condición del problema, implementando y comparando cuatro algoritmos numéricos (RK4, Verlet, Heun, Euler), realizando análisis de error y determinando el orden de convergencia. En la segunda parte, se analiza un modelo gravitacional reducido mediante el estudio de puntos de equilibrio, estabilidad y diagramas de bifurcación. En la tercera parte, se construye el plano de fase para un sistema de ecuaciones diferenciales que modela la altura y velocidad de un cuerpo bajo aceleración gravitacional decreciente. Los resultados muestran alta sensibilidad cerca de puntos de equilibrio y superioridad de métodos de orden superior en la resolución numérica.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\begin{enabstract}
+An integrated analysis of gravitational problems is presented, ranging from the classic Jules Verne problem on variable gravitational acceleration to reduced one-dimensional models. In the first part, a complete numerical analysis of the motion of a projectile simultaneously attracted by the Earth and the Moon is performed, evaluating the problem's condition, implementing and comparing four numerical algorithms (RK4, Verlet, Heun, Euler), performing error analysis, and determining the order of convergence. In the second part, a reduced gravitational model is analyzed through the study of equilibrium points, stability, and bifurcation diagrams. In the third part, the phase plane is constructed for a system of differential equations modeling the height and velocity of a body under decreasing gravitational acceleration. Results show high sensitivity near equilibrium points and superiority of higher-order methods in numerical resolution.
+\end{enabstract}
+
+\begin{keywords}
+EDO, Gravitación, Análisis Numérico, Estabilidad, Bifurcación, Plano de Fase
+\end{keywords}
+
+\begin{topics}
+Ecuaciones Diferenciales, Análisis Numérico, Sistemas Dinámicos
+\end{topics}
+
+\vspace{0.8cm}
+]
+
+%===================================================================================
+% PARTE A: PROBLEMA DE JULIO VERNE
+%===================================================================================
+\section{Parte A: Problema de Julio Verne e isoclinas}
+
+El problema de Julio Verne describe el movimiento de un proyectil lanzado desde la Tierra hacia la Luna, sujeto a atracción gravitacional de ambos cuerpos, donde la ecuación fundamental que representa este sistema es:
+
+\begin{equation}
+\frac{d^2r}{dt^2} = -\frac{GM_e}{r^2} + \frac{GM_m}{(S-r)^2}, \quad r(0) = R, \quad r'(0) = v_0
+\end{equation}
+
+donde en la resolución del mismo se tomarán como datos constantes:
+\begin{itemize}
+\item $M_e$ masa de la Tierra ($\approx 5.972 \times 10^{24}$ kg)
+\item $M_m$: masa de la Luna ($\approx 7.384 \times 10^{22}$ kg)
+\item $R$: radio terrestre ($\approx 6.371 \times 10^6$ m)
+\item $S$: distancia Tierra-Luna ($\approx 3.844 \times 10^8$ m)
+\item $v_0$: velocidad inicial crítica
+\end{itemize}
+
+\subsection{Resolución Analítica}
+
+El problema se reduce a determinar la energía mínima necesaria para que el proyectil escape del dominio gravitatorio terrestre y alcance el dominio gravitatorio lunar. Para ello es fundamental identificar el punto donde la aceleración neta se anula. Definimos $r_{\mathrm{eq}}$ como la posición que satisface
+\[
+-\frac{G M_{e}}{r_{\mathrm{eq}}^{2}} 
++ \frac{G M_{m}}{(S-r_{\mathrm{eq}})^{2}}
+= 0,
+\]
+Para que el proyectil logre superar esta barrera, basta con exigir que alcance $r_{\mathrm{eq}}$ con aceleración nula. Esta condición caracteriza la energía mínima requerida por el sistema.
+
+El movimiento está gobernado por una fuerza conservativa, ya que proviene del potencial gravitatorio combinado
+\[
+U(r) = -\,G\!\left(\frac{M_{e}}{r} + \frac{M_{m}}{S-r}\right).
+\]
+La energía mecánica total se conserva:
+\[
+E = \tfrac{1}{2} v^{2} + U(r).
+\]
+Evaluando en el punto de partida $r=R$ y en el punto de equilibrio, e imponiendo que $v(r_{\mathrm{eq}})=0$, se obtiene:
+\[
+\tfrac{1}{2} v_{0}^{2} + U(R) = U(r_{\mathrm{eq}}).
+\]
+Despejando la velocidad mínima de lanzamiento:
+\[
+v_{0}
+= \sqrt{\,2\bigl[\,U(r_{\mathrm{eq}})-U(R)\,\bigr]\,}
+\]
+\[
+v_{0} = \sqrt{2G\!\left[
+M_{e}\!\left(\frac{1}{R}-\frac{1}{r_{\mathrm{eq}}}\right)
++ M_{m}\!\left(\frac{1}{S-R}-\frac{1}{S-r_{\mathrm{eq}}}\right)
+\right]}
+\]
+Sustituyendo los valores numéricos estándar de $G$, $M_e$, $M_m$, $R$ y $S$, se obtiene
+\[
+v_{0} \approx 1.10723\times10^{4}\,\text{m/s}
+= 11072.3 \,\text{m/s}.
+\]
+
+\subsection{Análisis Numérico}
+
+\subsubsection{Análisis de la Condición del Problema}
+
+Para analizar la condición del problema, un análisis teórico inicial de la EDO sugiere un comportamiento diferenciado para cada parámetro inicial: la velocidad inicial $v_0$ y la posición inicial $r_0$.
+
+La transformación de la ecuación a:
+\begin{equation}
+v\frac{dv}{dr} = \frac{GM_e}{r^2} + \frac{GM_m}{(S-r)^2}
+\end{equation}
+revela que cuando $v \to 0$, la derivada $\frac{dv}{dr} = \frac{F(r)}{v}$ tiende a infinito, sugiriendo regiones de alta sensibilidad numérica. Para cuantificar esta sensibilidad, se recurrió al análisis de la matriz de evolución $\Phi(t)$ del sistema variacional.
+
+La solución del sistema variacional proporciona la matriz de evolución:
+\[
+\Phi(t_{\text{eq}}) = \begin{pmatrix}
+1.23 & 1820.57 \\
+0.004 & 2450.12
+\end{pmatrix}
+\]
+con número de condición $\kappa = \max \|\Phi(t)\| = 2850$.
+
+Los elementos de $\Phi(t)$ confirman cuantitativamente el comportamiento esperado:
+
+\begin{itemize}
+\item \textbf{Bajo condicionamiento respecto a $r_0$}: $\phi_{11} \approx 1$ y $\phi_{21} \approx 0$ indican que perturbaciones en la posición inicial tienen efectos acotados en la solución.
+\item \textbf{Alto condicionamiento respecto a $v_0$}: $\phi_{12} = 1820.57$ y $\phi_{22} = 2450.12$ muestran que pequeñas perturbaciones en la velocidad inicial se amplifican significativamente.
+\end{itemize}
+
+\subsubsection{Implementación y Comparación de Algoritmos}
+
+En la resolución de la EDO de segundo orden se utilizaron cuatro metodos numéricos: Runge-Kutta de cuarto orden, Heun, Euler, Verlet. 
+Para los pasos h = 1, h = 5, h = 10, h = 100, se computaron los métodos mencionados y se llegaron a los siguientes resultados mostrados en los Cuadros 1 y 2.
+\begin{table}[h!]
+\centering
+\caption{Valores de la solución para diferentes tamaños de paso (Parte 1)}
+\label{tab:solucion1}
+\begin{tabular}{lcc}
+\toprule
+ & RK4 & Verlet \\
+\midrule
+h=1 & 11069.50311 & 11069.51058 \\
+h=5 & 11069.50311 & 11069.58525 \\
+h=10 & 11069.50311 & 11069.8242 \\
+h=100 & 11069.62259 & 11101.21664 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Valores de la solución para diferentes tamaños de paso (Parte 2)}
+\label{tab:solucion2}
+\begin{tabular}{lcc}
+\toprule
+ & Heun & Euler \\
+\midrule
+h=1 & 11069.50311 & 11072.3929 \\
+h=5 & 11069.58538 & 11083.9971 \\
+h=10 & 11069.71966 & 11098.5732 \\
+h=100 & 11091.42704 & 11376.5426 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Se observa que RK4 mantiene consistencia desde el inicio, convergiendo incluso con $h=100$, mientras que los demás métodos son imprecisos con pasos grandes y van convergiendo conforme disminuye el tamaño del paso. Euler muestra la mayor desviación, especialmente con pasos grandes.
+
+Para realizar el análisis de los errores relativos, se toma como solución exacta la obtenida mediante el método análitico $v_0$ = $11072.3 m/s$ 
+
+\begin{table}[h!]
+\centering
+\caption{Errores relativos de los métodos (Parte 1)}
+\label{tab:errores1}
+\begin{tabular}{lcc}
+\toprule
+ & RK4 & Verlet \\
+\midrule
+h=1 & $2.526\times 10^{-4}$ & $2.519\times 10^{-4}$ \\
+h=5 & $2.526\times 10^{-4}$ & $2.452\times 10^{-4}$ \\
+h=10 & $2.526\times 10^{-4}$ & $2.236\times 10^{-4}$ \\
+h=100 & $2.418\times 10^{-4}$ & $2.612\times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Errores relativos de los métodos (Parte 2)}
+\label{tab:errores2}
+\begin{tabular}{lcc}
+\toprule
+ & Heun & Euler \\
+\midrule
+h=1 & $2.526\times 10^{-4}$ & $8.395\times 10^{-6}$ \\
+h=5 & $2.479\times 10^{-4}$ & $1.056\times 10^{-3}$ \\
+h=10 & $2.330\times 10^{-4}$ & $2.373\times 10^{-3}$ \\
+h=100 & $1.727\times 10^{-3}$ & $2.748\times 10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Como es posible observar en los Cuadros 3 y 4, para pasos pequeños ($h=1$) todos los métodos presentan errores del mismo orden de magnitud, pero para pasos grandes ($h=100$) Euler muestra el error más significativo, seguido por Verlet y Heun, mientras que RK4 mantiene un error bajo y consistente.
+
+\subsection{Orden de Convergencia y Complejidad Computacional}
+
+El orden de convergencia de cada método indica cómo disminuye el error al reducir el tamaño de paso, para los métodos estudiados:
+
+\begin{table}[h!]
+\centering
+\caption{Orden}
+\label{tab:orden_convergencia}
+\begin{tabular}{lc}
+\toprule
+Método & Orden \\
+\midrule
+Euler & 1 \\
+Heun & 2 \\
+Verlet & 2 \\
+RK4 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En cuanto a la complejidad computacional, todos los métodos requieren un número lineal de iteraciones respecto al tiempo total simulado, por lo que su complejidad es $O(n)$. Sin embargo, el costo por iteración sí cambia entre métodos, ya que depende del número de evaluaciones de la función necesaria en cada paso.
+
+\begin{table}[h!]
+\centering
+\caption{Costo computacional por iteración}
+\label{tab:costo_iteracion}
+\begin{tabular}{lc}
+\toprule
+Método & Evaluaciones \\
+\midrule
+Euler & 1 \\
+Heun & 2 \\
+Verlet & 1 \\
+RK4 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En consecuencia, métodos como Euler o Verlet resultan más ligeros computacionalmente, mientras que RK4 ofrece mayor precisión a costa de un mayor número de evaluaciones por paso.
+
+\subsubsection{Análisis de Estabilidad}
+
+A la hora de realizar el análisis hacia adelante, se perturba el dato inicial $r_0$ y observando los resultados que proporcionan los diferentes métodos utilizando un tamaño de paso relativamente pequeño $h=1$. 
+
+\begin{table}[h!]
+\centering
+\caption{Sensibilidad a perturbaciones en $r_0$ (h=1)}
+\label{tab:forward_r0}
+\begin{tabular}{lcccc}
+\toprule
+$r_0$ (m) & RK4 & Verlet & Heun & Euler \\
+\midrule
+6,371,000 & 11069.50 & 11069.51 & 11072.39 & 11072.39 \\
+6,571,000 & 10896.14 & 10896.14 & 10896.14 & 10898.85 \\
+6,771,000 & 10730.44 & 10730.44 & 10730.44 & 10733.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+De los resultados que se muestran en el Cuadro 5, se obtiene que Euler muestra un error sistemático de aproximadamente +2.89 para $r_0 = R$, mientras que los métodos en general no son muy sensibles ante variaciones en este parámetro. 
+
+\begin{table}[h!]
+\centering
+\caption{Sensibilidad a perturbaciones en $v_0$ (h=1)}
+\label{tab:forward_v0}
+\begin{tabular}{lc}
+\toprule
+$v_0$ (m/s) & ¿Alcanza la Luna? \\
+\midrule
+11000 & No (todos los métodos) \\
+11070 & Sí (RK4, Verlet, Heun), No (Euler) \\
+11072 & Sí (RK4, Verlet, Heun), No (Euler) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Para perturbaciones en $v_0$ se observa un comportamiento crítico: Euler falla en predecir correctamente la transición cerca del valor crítico, mientras que RK4, Verlet y Heun mantienen coherencia en sus predicciones.
+
+Para realizar el análisis hacia atrás, se evaluó la estabilidad numérica de los algoritmos mediante la comparación entre el resultado obtenido y la solución que se habría calculado con datos ligeramente perturbados. 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Método} & \textbf{$h = 1$} & \textbf{$h = 5$} & \textbf{$h = 10$} & \textbf{$h = 100$} \\
+\midrule
+Euler & 3.418 & -0.488 & 2.441 & -1.465 \\
+Heun & 4.395 & 2.441 & -2.441 & 2.441 \\
+Verlet & -3.418 & -0.488 & 1.465 & -2.441 \\
+RK4 & 1.465 & 1.465 & 1.465 & -3.418 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Los valores de \( |\Delta r| < 5 \, \text{m} \) demuestran que el problema es \textbf{estable respecto a perturbaciones en la posición inicial}. La jerarquía de estabilidad, basada en la magnitud de \( \Delta r \), es:
+
+\[
+\text{RK4} > \text{Verlet} \approx \text{Heun} > \text{Euler} 
+\]
+
+confirmando que el método RK4 presenta la menor sensibilidad a variaciones en las condiciones iniciales.
+
+\subsection{Análisis Cualitativo mediante Isoclinas}
+
+A partir de un modelo unidimensional del movimiento radial, se analiza el comportamiento cualitativo del sistema mediante el trazado del campo de isoclinas asociado a la ecuación diferencial del movimiento, con el objetivo de identificar regiones de estabilidad o inestabilidad, así como la sensibilidad del sistema ante perturbaciones iniciales.
+
+Considerando ahora la expresión:
+$f(r,v)=\frac{\frac{-GM_e}{r^2}+\frac{GM_m}{(S-r)^2}}{v}$ 
+Se genera el campo de isoclinas (Fig. 1), representando las pendientes $\frac{dv}{dr}$ en cada punto del plano. 
+
+El patrón cualitativo de las trayectorias muestra un comportamiento dominado por dos regiones de atracción gravitatoria determinadas por cada uno de los términos de la ecuación: uno cerca de la Tierra, y otra cerca de la Luna.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\linewidth]{isoclines.png}
+\caption{Campo de isoclinas correspondiente al movimiento radial en el sistema Tierra–Luna.}
+\label{fig:isoclinas}
+\end{figure}
+
+A partir del campo de direcciones, pueden distinguirse tres zonas de gran relevancia:
+\begin{enumerate}
+\item \textbf{Eje $v$}: Dado que el término $\frac{1}{v}$ en la ecuación se dispara cuando $v\approx$ 0, la región tiene un comportamiento inestable, es decir, variaciones en $v$ generan cambios bruscos de pendiente. Para $v>0$ las pendientes son negativas y para $v<0$ positivas, lo que corresponde a puntos de retorno o colisión donde la dinámica del sistema cambia abruptamente.
+\item \textbf{Cercano al eje $r$}: Corresponde a la zona de influencia gravitatoria terrestre. Posee una alta sensibilidad respecto a $v$, observándose en los cambios bruscos de la dirección de las pendientes.
+\item \textbf{Línea vertical $r=r_e$}: En el punto de equilibrio, donde las atracciones de la Tierra y la Luna se compensan, el sistema actúa como un umbral energético. Si la velocidad inicial es apenas positiva, se desplaza hacia la Luna; si es apenas negativa, regresa hacia la Tierra. Este comportamiento refleja una inestabilidad inherente a las variaciones de $v$.
+\end{enumerate}
+
+En el resto del campo, las pendientes son prácticamente horizontales, lo que indica que la variación de $v$ respecto a $r$ es mínima. En estas regiones, la aceleración neta es casi nula y se mantiene la velocidad con poca variación, reflejando un comportamiento estable. 
+
+Podemos corroborar estas observaciones cualitativas a partir de las \textbf{isoclinas} del sistema. Para ello, se trazan las curvas correspondientes a las pendientes $k = 1$, $k = -1$, $k = 5$, $k = -5$, $k = 0.5$, $k = -0.5$, $k = 0$ y pendiente infinita. Con el fin de facilitar el análisis, se dividen en \textbf{isoclinas positivas y negativas}, dejando como casos particulares a $k = 0$ y a la pendiente infinita. 
+Este análisis confirma los hallazgos del campo de pendientes: las \textbf{isoclinas positivas} aparecen principalmente cerca de la \textbf{influencia lunar}, donde la aceleración neta es positiva, favoreciendo un aumento de la velocidad.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{earth.png}
+    \caption{Campo de isoclinas en la región del punto de equilibrio}
+    \label{fig:placeholder}
+\end{figure}
+Las \textbf{negativas} dominan en la \textbf{región terrestre} (Fig 2), donde la aceleración es negativa; las isoclinas $k = 0$ y la de pendiente infinita representan, respectivamente, las condiciones $v = 0$ y $a = 0$, delimitando \textbf{transiciones entre ambos regímenes}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{stable.png}
+    \caption{Campo de isoclinas en la región del punto de equilibrio}
+    \label{fig:placeholder}
+\end{figure}
+Finalmente, en las proximidades del punto de equilibrio (Fig 3), las isoclinas se agrupan densamente y cambian de signo con rapidez, corroborando visualmente la alta sensibilidad y la inestabilidad que se infirió inicialmente a partir del campo de direcciones.
+
+%===================================================================================
+% PARTE B: MODELO GRAVITACIONAL REDUCIDO
+%===================================================================================
+\section{Parte B: Bifuración}
+
+Para capturar cambios en la dinámica gravitacional reducida se considera el modelo unidimensional en EDO:
+\[
+\frac{dz}{dt} = \mu z - z^3
+\]
+Con $\mu$ constante, $t$ variable independiente y $z$ una función $z(t)$ dependiente de $t$.
+
+\subsection{Puntos de Equilibrio}
+(Definición) Los puntos de equilibrio son aquellas soluciones constantes de la EDO.
+$\tilde{\mathbf{z}} \in \mathbb{R}$ es un \textbf{punto de equilibrio} para la ecuación diferencial:
+\[
+\frac{d{z}}{dt} = {f}(t, {z})
+\]
+Si ${f}(t, \tilde{{z}}) = {0}$ para cualquier $t$.
+
+Entonces, para resolver el problema hay que hallar las soluciones que cumplen que su primera derivada es igual a 0.
+\[
+{f}(t, \tilde{{z}}) = 0
+\]
+Sustituir la función ${f}(t, \tilde{{z}})$ con la EDO dada, ya explícita:
+\[
+\mu \tilde{{z}} - \tilde{{z}}^3 = 0
+\]
+\[
+\tilde{{z}}(\mu - \tilde{{z}}^2) = 0
+\]
+\[
+\tilde{{z}}(\sqrt{\mu} + \tilde{{z}})(\sqrt{\mu} - \tilde{{z}}) = 0
+\]
+Por tanto, si $z = \mathbf{0}$, $z = \mathbf{\sqrt{\mu}}$ ó $z = \mathbf{-\sqrt{\mu}}$, entonces $z$ es un punto de equilibrio para la EDO.
+
+\subsection{Estabilidad de los Puntos de Equilibrio}
+(Teorema) Sea la EDO de primer orden, autónoma y unidimensional $\frac{d{z}}{dt} = f(z)$, un punto de equilibrio $\tilde{z}$ es:
+\begin{description}
+    \item [Estable] si $f'(\tilde{z}) < 0$.
+    \item [Inestable] si $f'(\tilde{z}) > 0$.
+\end{description}
+
+Sea $f'(\tilde{z}) = \mu - 3z^2$
+\begin{enumerate}
+    \item Para $\mu > 0$:
+    \begin{enumerate}
+        \item $z = 0$
+        \[
+        \dot{z}'(0) = \mu - 3 (0)^2 = \mu
+        \]
+        \[
+        \dot{z}'(0) = \mu > 0
+        \]
+        Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{inestable}.
+        
+        \item $z = \sqrt{\mu}$
+        \[
+        \dot{z}'(\sqrt{\mu}) = \mu - 3 (\sqrt{\mu})^2 = \mu - 3\mu = -2\mu
+        \]
+        \[
+        \dot{z}'(\sqrt{\mu}) = -2\mu < 0
+        \]
+        Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = \sqrt{\mu}$ es \textbf{estable}.
+        
+        \item $z = -\sqrt{\mu}$
+        \[
+        \dot{z}'(-\sqrt{\mu}) = \mu - 3 (-\sqrt{\mu})^2 = \mu - 3\mu = -2\mu
+        \]
+        \[
+        \dot{z}'(-\sqrt{\mu}) = -2\mu < 0
+        \]
+        Si $\mu > 0$ entonces el punto de equilibrio $\tilde{z} = -\sqrt{\mu}$ es \textbf{estable}.
+    \end{enumerate}
+    
+    \item Para $\mu < 0$:
+    \begin{enumerate}
+        \item $z = 0$:
+        \[
+        \dot{z}'(0) = \mu < 0
+        \]
+        Si $\mu < 0$ entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{estable}. 
+        \item $z = \sqrt{\mu}$ no existe en en el conjunto de los números reales.
+        
+        \item $z = -\sqrt{\mu}$ no existe en en el conjunto de los números reales.
+    \end{enumerate}
+    \item Para $\mu = 0$
+    \[
+    \dot{z}'(0) = 0
+    \]
+    \[
+    \dot{z}'(\sqrt{\mu}) = -2\mu = 0
+    \]
+    \[
+    \dot{z}'(-\sqrt{\mu}) = 2\mu = 0
+    \]
+    Si $\mu = 0$ entonces el teorema no decide la estabilidad en los puntos de equilibrio.
+    
+    Para llegar a una conclusión, podemos analizar el comportamiento de la EDO con el diagrama de bifurcación.
+\end{enumerate}
+
+\subsection{Diagrama de Bifurcación}
+Al observar la EDO dada, se puede llegar a que la derivada de $z(t)$ tiene la forma:
+\[
+\dot{x} = rx-x^3
+\]
+Por tanto, su tipo de bifurcación es horquilla supercrítica. Donde los puntos de equilibrio cumplen el mismo tipo de estabilidad anteriormente analizados, además de que el punto $(0, 0)$ es un punto estable, siendo el origen para $\mu = 0$.
+
+Por tanto, si $\mu = 0$, entonces el punto de equilibrio $\tilde{z} = 0$ es \textbf{estable}.
+
+Con los puntos de equilibrio ($\tilde{z}$) hallados y clasificados según la estabilidad, para cualquier $\mu$, se puede construir el diagrama de bifurcación.
+
+\begin{enumerate}
+    \item Para $\mu < 0$: Existe un solo punto de equilibrio estable $z = 0$ (dibujado con una línea continua).        
+    \item Para $\mu = 0$: Existe un solo punto de equilibrio estable $z = 0$. Donde ocurre una bifurcación de tridente supercrítica.        
+    \item Para $\mu > 0$: Existe un punto de equilibrio inestable en $z = 0$ (dibujado con una línea discontinua), y dos equilibrios estables simétricos $z = \pm\sqrt{\mu}$ (ambos dibujados con líneas continuas).
+\end{enumerate}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            axis lines = middle,
+            xlabel = {$\mu$},       
+            ylabel = {$z$},         
+            x label style={at={(axis description cs:1,0.5)},anchor=west},
+            y label style={at={(axis description cs:0.5,1)},anchor=south},
+            xmin = -3.2, xmax = 3.2,
+            ymin = -2.0, ymax = 2.0,
+            unit vector ratio = 1 1,
+            grid = major,           
+            width = \linewidth,     
+            samples = 200,          
+            thick                   
+            ]
+            \addplot[blue, ultra thick, domain=-3:0] {0};
+            \addplot[blue, ultra thick, dotted, domain=0:3] {0};
+            \addplot[blue, ultra thick, domain=0:3] {sqrt(x)};
+            \addplot[blue, ultra thick, domain=0:3] {-sqrt(x)};                
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Diagrama de bifurcación para el modelo $\dot{z} = \mu z - z^3$ de tipo horquilla supercrítica. Las curvas azules continuas indican las ramas de equilibrio estables, mientras que la línea azul discontinua representa el equilibrio inestable tras la ruptura de simetría en $\mu=0$.}
+\end{figure}
+
+\subsection{Interpretación Física (Captura vs Escape)}
+El cambio de signo de $\mu$ representa una transición de fase en la dinámica.
+\begin{description}
+    \item [Cuando $\mu < 0$] El origen ($z = 0$) es un "atractor". Cualquier perturbación pequeña decaerá y el sistema será "capturado" por el centro. Físicamente, esto representa un estado donde la gravedad (o la fuerza restauradora efectiva) domina y mantiene al objeto confinado en la posición de equilibrio original.
+    \item [Cuando $\mu > 0$] El origen se vuelve un "repulsor". Una pequeña perturbación hará que el sistema se aleje del $z = 0$; es decir, ocurre un escape gravitacional desde el punto central. Sin embargo, debido al término no lineal cúbico, el objeto no escapa al infinito, sino que es recapturado en una nueva órbita o posición de equilibrio estable a una distancia $\sqrt{\mu}$ del centro.
+\end{description}
+
+%===================================================================================
+% PARTE C: PLANO DE FASE Y ESTABILIDAD
+%===================================================================================
+\section{Parte C: Plano de fase y estabilidad}
+
+(Definición) Los puntos críticos son aquellas soluciones constantes de la EDO.
+$\tilde{\mathbf{z}} \in \mathbb{R}$ es un \textbf{punto de equilibrio} para la ecuación diferencial:
+\[
+\frac{d{z}}{dt} = {f}(t, {z})
+\]
+Si ${f}(t, \tilde{{z}}) = {0}$ para cualquier $t$.
+
+Entonces, para hallar los puntos, se debe igualar las derivadas del sistema a cero. Buscar los valores $(\tilde{y}, \tilde{x})$ tal que:
+\begin{equation}
+    \begin{cases}
+        \dfrac{dy}{dt} = v \\[10pt]
+        \dfrac{dv}{dt} = -\dfrac{100}{(y+1)^2}
+    \end{cases}
+    \label{eq:sistema}
+\end{equation}
+De la primera ecuación de sistema se obtiene $\tilde{v} = 0$.
+ Sin embargo, al analizar la segunda ecuación:
+\[
+-\frac{100}{(y+1)^2} = 0
+\]
+\[
+\frac{1}{(y+1)^2} = 0
+\]
+Para que una fracción sea cero, su numerador debe ser cero. Como $1 \neq 0$, la segunda ecuación \textbf{no tiene solución} para ningún valor finito de $y$.
+
+Por tanto, el sistema \textbf{no tiene puntos críticos}.
+
+\subsection{Diagrama de Fase}
+Para construir las trayectorias en el plano de fase $(y, v)$, eliminamos el tiempo $dt$ usando la regla de la cadena:
+\[ 
+\frac{dv}{dy} = \frac{dv/dt}{dy/dt} = \frac{-\frac{100}{(y+1)^2}}{v} 
+\]
+
+Separamos variables e integramos:
+\[ 
+v \, dv = -100 (y+1)^{-2} \, dy 
+\]
+\[ 
+\int v \, dv = \int -100 (y+1)^{-2} \, dy 
+\]
+\[ 
+\frac{1}{2}v^2 = \frac{100}{y+1} + C
+\]
+
+Las trayectorias son curvas de la forma:
+\[ 
+v = \pm \sqrt{2 \, C + \frac{200}{y+1}}
+\]
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            axis lines = middle,
+            xlabel = {$y$},
+            ylabel = {$v$},
+            xmin = 0, xmax = 10,
+            ymin = -15, ymax = 15,
+            samples = 200,
+            domain = 0:10,
+            grid = major,
+            width=0.45\textwidth,
+            height=6cm,
+            view={0}{90}
+            ]               
+            \addplot [blue, thick] {sqrt(max(0, -20 + 200/(x+1)))};
+            \addplot [blue, thick] {-sqrt(max(0, -20 + 200/(x+1)))};
+            
+            \addplot [red, thick] {sqrt(200/(x+1))};
+            \addplot [red, thick] {-sqrt(200/(x+1))};
+            
+            \addplot [green!60!black, thick] {sqrt(40 + 200/(x+1))};
+            \addplot [green!60!black, thick] {-sqrt(40 + 200/(x+1))};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Plano de fase $(y,v)$. Curvas azules: trayectoria con $C=-10$. Roja: trayectoria crítica ($C=0$). Verdes: trayectoria con ($C=10$).}
+    \label{fig:plano_fase}
+\end{figure}
+
+\subsection{Interpretación del Movimiento}
+
+Basándonos en el diagrama de fase de la Figura \ref{fig:plano_fase} y las ecuaciones obtenidas, podemos interpretar la dinámica del cuerpo:
+
+\begin{description}
+    \item [Flujo del sistema:] Dado que $\frac{dy}{dt} = v$, en el semiplano superior ($v>0$) el movimiento siempre es hacia la derecha ($y$ crece), representando el ascenso del cuerpo. En el semiplano inferior ($v<0$), el movimiento es hacia la izquierda ($y$ decrece), representando la caída.
+    
+    \item [Trayectorias cerradas ($C < 0$, Curvas Azules):] Si la constante de integración es suficientemente pequeña, la curva intercepta el eje $y$ (velocidad cero). Esto significa que el cuerpo alcanza una altura máxima y luego comienza a caer, regresando hacia $y=0$.
+    
+    \item [Trayectorias abiertas ($C \ge 0$, Curvas Roja y Verdes):] Si la energía es suficiente, la velocidad nunca llega a cero para $y>0$. El cuerpo tiene suficiente energía cinética para escapar de la atracción gravitacional, moviéndose hacia $y \to \infty$.
+\end{description}
+
+Finalmente, la ausencia de puntos críticos indica que el cuerpo nunca se detiene estáticamente en una posición fija; o bien escapa indefinidamente o choca contra la superficie (o el centro de atracción en $y=-1$).
+
+\label{end}
+
+\end{document}
+```
